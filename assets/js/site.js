@@ -393,18 +393,48 @@
     if (hasWa) buttons += '<a class="btn" id="sendWa" target="_blank" rel="noopener" href="' + esc(waLink(text)) + '">Send order on WhatsApp</a>';
     if (hasMail) buttons += '<a class="btn' + (hasWa ? ' btn--line' : '') + '" id="sendMail" href="' +
       esc(mailLink('New order from ' + val('cName') + ', ' + rupees(amount), text)) + '">Send order by email</a>';
-    if (!hasWa && !hasMail) buttons += '<button class="btn" type="button" id="sendIg">Copy order and open Instagram</button>';
+    buttons += '<button class="btn btn--line" type="button" id="copyOrder">Copy order</button>';
+    if (!hasWa && !hasMail) buttons += '<a class="btn btn--line" target="_blank" rel="noopener" href="' + igUrl + '">Message us on Instagram</a>';
     send.innerHTML = buttons;
 
-    $('#sendNote').textContent = (hasWa || hasMail)
-      ? 'Your order and address are already written out. Just press send, and we will pack and ship it once payment is in.'
-      : 'Your order is copied for you. Paste it in a message to @' + handle + ' and we will take it from there.';
+    // where a copied order can be pasted and sent
+    var places = [];
+    if (hasWa) places.push('WhatsApp +' + waNumber);
+    if (hasMail) places.push(C.email);
+    places.push('Instagram @' + handle);
+    var note = $('#sendNote');
+    var baseNote = ((hasWa || hasMail)
+      ? 'Your order and address are already written out. Press a send button, or copy the order and paste it to us yourself. '
+      : 'Copy your order and paste it in a message to us. ') + 'You can reach us on ' + places.join(', ') + '.';
+    note.textContent = baseNote;
 
-    var igBtn = $('#sendIg');
-    if (igBtn) igBtn.addEventListener('click', function () {
-      var go = function () { window.open(igUrl, '_blank', 'noopener'); };
-      if (navigator.clipboard) navigator.clipboard.writeText(text).then(go, go); else go();
+    var copyBtn = $('#copyOrder');
+    copyBtn.addEventListener('click', function () {
+      copyText(text, function (ok) {
+        copyBtn.textContent = ok ? 'Order copied' : 'Could not copy';
+        if (!ok) note.textContent = 'Your browser blocked copying. Use a send button instead, or message us on ' + places.join(', ') + '.';
+        setTimeout(function () { copyBtn.textContent = 'Copy order'; }, 1800);
+      });
     });
+  }
+
+  // copy text to the clipboard, with a fallback for older browsers
+  function copyText(text, done) {
+    var fallback = function () {
+      var ok = false;
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px';
+        document.body.appendChild(ta); ta.select();
+        ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch (e) { ok = false; }
+      done(ok);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    } else { fallback(); }
   }
 
   renderCart();
