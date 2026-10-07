@@ -5,7 +5,7 @@
    The idea: the page is a pat (a Bengal scroll painting).
    A painted border runs down the left edge, and painted
    bands divide one panel of the story from the next.
-   Colours and paper texture are Adaaye's original ones:
+   Colours are Adaaye's original ones, on a quiet paper texture:
    ivory, charcoal, sindoor, indigo, turmeric and clay.
    ========================================================= */
 
@@ -58,13 +58,15 @@ html{ scroll-behavior:smooth; scroll-padding-top:5.5rem; -webkit-text-size-adjus
 body{
   margin:0;
   background-color:var(--ivory);
+  /* paper: soft handmade-paper grain over a faint handloom weave */
   background-image:
-    radial-gradient(900px 520px at 12% -8%, rgba(164,49,42,.05), transparent 60%),
-    radial-gradient(800px 460px at 100% 6%, rgba(38,54,76,.045), transparent 58%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%238a6142' stroke-width='1' stroke-opacity='0.15'%3E%3Cpath d='M40 20c14 0 22 12 22 26 0 16-12 22-22 30-6 5-8 11-4 16 5 6 15 4 18-4' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='20' r='2.2' fill='%23a4312a' stroke='none' fill-opacity='0.15'/%3E%3C/g%3E%3Cg fill='none' stroke='%2326364c' stroke-width='1' stroke-opacity='0.11' transform='translate(120,100) rotate(160)'%3E%3Cpath d='M0 0c14 0 22 12 22 26 0 16-12 22-22 30-6 5-8 11-4 16 5 6 15 4 18-4' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(rgba(46,42,38,.045) 1px, transparent 1px);
-  background-size:auto, auto, 160px 160px, 3px 3px;
-  background-repeat:no-repeat, no-repeat, repeat, repeat;
+    radial-gradient(1100px 620px at 10% -10%, rgba(164,49,42,.04), transparent 62%),
+    radial-gradient(900px 520px at 100% 4%, rgba(193,137,47,.05), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .34 -.125'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(0deg, rgba(138,97,66,.035) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(138,97,66,.028) 0 1px, transparent 1px 4px);
+  background-size:auto, auto, 240px 240px, auto, auto;
+  background-repeat:no-repeat, no-repeat, repeat, repeat, repeat;
   color:var(--ink);
   font-family:var(--text);
   font-size:1.0625rem;
