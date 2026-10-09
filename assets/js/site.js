@@ -79,6 +79,12 @@
     return (symbols[currency] || '') + (whole ? Math.round(v).toLocaleString('en-IN') : v.toFixed(2));
   }
 
+  /* ---------- price reveal ---------- */
+  var revealAt = Date.parse(C.priceRevealAt || '') || 0;
+  var revealLabel = C.priceRevealLabel || '';
+  function pricesLive() { return !revealAt || Date.now() >= revealAt; }
+  var lockedText = 'Coming ' + revealLabel;
+
   /* ---------- shop ---------- */
   var shelves = $('#shelves');
   if (shelves) {
@@ -104,8 +110,11 @@
             '<div class="piece-photo"><img src="' + IMG + esc(p.img) + '" alt="' + esc(p.name) + ', hand-painted by Adaaye" loading="lazy" width="600" height="600"></div>' +
             '<h4>' + esc(p.name) + '</h4>' +
             '<p class="piece-style">' + esc(p.style || '') + (p.note ? '. ' + esc(p.note) : '') + '</p>' +
-            '<div class="piece-foot"><span class="price" data-inr="' + p.price + '">' + shown(p.price) + '</span>' +
-            '<button class="add" type="button" data-add="' + i + '">Add to cart</button></div>' +
+            '<div class="piece-foot">' + (pricesLive()
+              ? '<span class="price" data-inr="' + p.price + '">' + shown(p.price) + '</span>' +
+                '<button class="add" type="button" data-add="' + i + '">Add to cart</button>'
+              : '<span class="price price--locked" data-inr="' + p.price + '" aria-label="Price revealed ' + esc(revealLabel) + '">₹ · · ·</span>' +
+                '<button class="add" type="button" data-add="' + i + '" disabled>' + esc(lockedText) + '</button>') + '</div>' +
             '</article>';
         }).join('') + '</div>';
       } else {
@@ -141,9 +150,43 @@
       });
     }
 
+    // countdown bar above the shop until prices are revealed
+    var tools = $('.shop-tools');
+    var currencyLabel = sel ? sel.closest('label') : null;
+    if (!pricesLive() && tools) {
+      tools.insertAdjacentHTML('beforebegin',
+        '<div class="reveal-bar" id="revealBar" role="timer" aria-live="off">' +
+          '<p>Prices unveil on <b>' + esc(revealLabel) + '</b></p>' +
+          '<p class="reveal-count" id="revealCount"></p>' +
+        '</div>');
+      if (currencyLabel) currencyLabel.hidden = true;
+      var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      var tick = function () {
+        var left = revealAt - Date.now();
+        if (left <= 0) { unlockPrices(); return; }
+        var d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24,
+            m = Math.floor(left / 6e4) % 60, sec = Math.floor(left / 1e3) % 60;
+        $('#revealCount').innerHTML =
+          '<span><b>' + d + '</b>days</span><span><b>' + pad(h) + '</b>hours</span>' +
+          '<span><b>' + pad(m) + '</b>minutes</span><span><b>' + pad(sec) + '</b>seconds</span>';
+      };
+      var timer = setInterval(tick, 1000);
+      tick();
+      function unlockPrices() {
+        clearInterval(timer);
+        var bar = $('#revealBar'); if (bar) bar.remove();
+        if (currencyLabel) currencyLabel.hidden = false;
+        $$('.price--locked', shelves).forEach(function (el) {
+          el.classList.remove('price--locked'); el.removeAttribute('aria-label');
+          el.textContent = shown(parseFloat(el.getAttribute('data-inr')));
+        });
+        $$('[data-add]', shelves).forEach(function (b) { b.disabled = false; b.textContent = 'Add to cart'; });
+      }
+    }
+
     shelves.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-add]');
-      if (!btn) return;
+      if (!btn || btn.disabled || !pricesLive()) return;
       var p = PRODUCTS[+btn.getAttribute('data-add')];
       addToCart(p);
       btn.textContent = 'Added';
