@@ -447,3 +447,19 @@ button{ cursor:pointer; }
 
 /* heads that carry their own content need no gap below */
 .hampers .head, .droplist .head{ margin-bottom:0; }
+
+/* ---------- price reveal countdown ---------- */
+.reveal-bar{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:1rem 2rem; margin-bottom:2rem; padding:1.1rem 1.4rem; background:var(--ivory-light); border:1px solid rgba(164,49,42,.45); border-left:4px solid var(--sindoor); }
+.reveal-bar p{ margin:0; font-size:1.0625rem; color:var(--charcoal); }
+.reveal-bar p b{ font-weight:600; color:var(--sindoor); }
+.reveal-count{ display:flex; gap:1.3rem; }
+.reveal-count span{ display:flex; flex-direction:column; align-items:center; font-size:.8125rem; color:var(--walnut); min-width:3.2rem; }
+.reveal-count span b{ font-family:var(--display); font-weight:500; font-size:1.9rem; line-height:1.05; color:var(--charcoal); font-variant-numeric:tabular-nums; }
+.price--locked{ color:var(--walnut); letter-spacing:.08em; }
+.add[disabled]{ cursor:default; opacity:1; border-color:rgba(46,42,38,.25); color:var(--walnut); background:transparent; font-size:.875rem; }
+.add[disabled]:hover{ background:transparent; color:var(--walnut); }
+@media (max-width:520px){
+  .reveal-count{ gap:.9rem; }
+  .reveal-count span{ min-width:2.6rem; }
+  .reveal-count span b{ font-size:1.55rem; }
+}
