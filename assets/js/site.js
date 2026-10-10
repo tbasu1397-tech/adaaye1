@@ -386,6 +386,94 @@
     });
   }
 
+  /* ---------- enquiry box ---------- */
+  var enq = $('#enqForm');
+  if (enq) {
+    var enqTo = String(C.enquiryEmail || C.email || '').trim();
+    var w3Key = String(C.web3formsKey || '').trim();
+    var topicBox = $('#eTopic'), pieceSel = $('#ePiece');
+    var done = $('#enqDone'), sendBtn = $('#eSend'), errBox = $('#enqError');
+
+    PRODUCTS.forEach(function (p) {
+      var o = document.createElement('option');
+      o.value = o.textContent = p.name + (p.status === 'soon' ? ' (in progress)' : '');
+      pieceSel.appendChild(o);
+    });
+    topicBox.addEventListener('click', function (e) {
+      var c = e.target.closest('.chip'); if (!c) return;
+      $$('.chip', topicBox).forEach(function (b) { b.setAttribute('aria-pressed', b === c ? 'true' : 'false'); });
+    });
+    enq.addEventListener('input', function (e) {
+      if (e.target.getAttribute('aria-invalid') === 'true') e.target.setAttribute('aria-invalid', 'false');
+      errBox.hidden = true;
+    });
+    var topic = function () { var c = $('.chip[aria-pressed="true"]', topicBox); return c ? c.textContent : ''; };
+    var v = function (id) { return $('#' + id).value.trim(); };
+
+    var showDone = function (name, viaMail) {
+      enq.hidden = true; done.hidden = false;
+      $('#enqThanks').textContent = 'Thank you' + (name ? ', ' + name.split(' ')[0] : '') + '.';
+      $('#enqDoneText').textContent = viaMail
+        ? 'Your email app has opened with your message ready. Press send and it goes straight to Titas.'
+        : 'Your message is on its way to Titas. You will hear back on ' + v('eEmail') + ' within 24 hours.';
+      $('#enqThanks').focus();
+    };
+    $('#enqAgain').addEventListener('click', function () {
+      enq.reset(); $$('.chip', topicBox).forEach(function (b, i) { b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
+      done.hidden = true; enq.hidden = false; $('#eName').focus();
+    });
+
+    enq.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if ($('#eBot').checked) return;
+      var checks = [
+        ['eName', function (x) { return x.length > 1; }, 'Please enter your name.'],
+        ['eEmail', function (x) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x); }, 'Please enter a valid email address so we can reply.'],
+        ['eMsg', function (x) { return x.length > 4; }, 'Please write your message.']
+      ];
+      var bad = null, problem = '';
+      checks.forEach(function (c) {
+        var el = $('#' + c[0]), ok = c[1](el.value.trim());
+        el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+        if (!ok && !bad) { bad = el; problem = c[2]; }
+      });
+      if (bad) { errBox.textContent = problem; errBox.hidden = false; bad.focus(); return; }
+      errBox.hidden = true;
+
+      var name = v('eName'), subject = 'Website enquiry: ' + topic() + ' from ' + name;
+      var data = {
+        Name: name, Email: v('eEmail'), Phone: v('ePhone') || '-',
+        Topic: topic(), Piece: pieceSel.value || '-', Message: v('eMsg')
+      };
+      var asText = Object.keys(data).map(function (k) { return k + ': ' + data[k]; }).join('\n');
+      var mailFallback = function () {
+        if (!enqTo) { errBox.textContent = 'Sorry, the message could not be sent. Please message us on Instagram @' + handle + '.'; errBox.hidden = false; return; }
+        window.location.href = 'mailto:' + enqTo + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(asText);
+        showDone(name, true);
+      };
+
+      var url, body;
+      if (w3Key) {
+        url = 'https://api.web3forms.com/submit';
+        body = { access_key: w3Key, subject: subject, from_name: 'Adaaye website', replyto: data.Email };
+      } else if (enqTo) {
+        url = 'https://formsubmit.co/ajax/' + encodeURIComponent(enqTo);
+        body = { _subject: subject, _template: 'table', _captcha: 'false', _replyto: data.Email };
+      } else { mailFallback(); return; }
+      Object.keys(data).forEach(function (k) { body[k] = data[k]; });
+
+      sendBtn.disabled = true; sendBtn.textContent = 'Sending...';
+      fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          var ok = res.ok && (res.j.success === true || res.j.success === 'true');
+          if (ok) showDone(name, false); else mailFallback();
+        })
+        .catch(mailFallback)
+        .then(function () { sendBtn.disabled = false; sendBtn.textContent = 'Send enquiry'; });
+    });
+  }
+
   /* =======================================================
      CART
      ======================================================= */

@@ -17,6 +17,18 @@ window.ADAAYE = {
   // Email address that receives orders. Example: 'orders@adaaye.in'
   email: 'adaaye.business@gmail.com',
 
+  // ---- Enquiry box ----
+  // Every enquiry from the website is emailed here.
+  enquiryEmail: 'adaaye.business@gmail.com',
+
+  // OPTIONAL but recommended: a free Web3Forms access key.
+  // Get it at web3forms.com (enter the email above, the key arrives
+  // by email), then paste it here, e.g. 'a1b2c3d4-....'.
+  // Left empty, the site uses FormSubmit instead: the very first
+  // enquiry sends an "Activate" email to the address above. Click it
+  // once and every enquiry after that arrives normally.
+  web3formsKey: '',
+
   // ---- Payment scanner (UPI) ----
   // Your UPI ID. Example: 'titas@okhdfcbank'
   // When this is filled, the cart shows a scanner (QR code)
