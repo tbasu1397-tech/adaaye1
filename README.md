@@ -40,24 +40,42 @@ Check the UPI ID twice. Payments go to whatever is written there.
    (on a phone there is also a "Pay in your UPI app" button).
 4. They press **Send order on WhatsApp** or **Send order by email**. The full
    order and address are already written out in the message.
+   **Copy order** copies the same text, so they can paste it anywhere.
 
 There is no online payment gateway. You confirm payments in your own UPI app.
 
-## 3. Add, change or remove a product (`assets/js/products.js`)
+## 3. Prices, options and products (`assets/js/products.js`)
 
-Copy one line in `ADAAYE_PRODUCTS`, paste it, and change the details:
+The shop holds all 22 products. Each one is a block like this:
 
 ```js
-{ name: 'Fish Key Chain', cat: 'keychain', style: 'Madhubani', price: 350, img: 'fish-keychain.webp' },
+{ no: 1, name: 'Peacock Coasters', cat: 'table', style: 'Madhubani peacock on wood',
+  price: 0,
+  photos: ['coaster-1', 'coaster-2', 'coaster-3'],
+  options: [
+    { label: 'Shape', values: ['Round', 'Square'] },
+    { label: 'Set', values: [ { v: 'Set of 2', price: 400 }, { v: 'Set of 4', price: 750 } ] }
+  ] },
 ```
 
-- `cat` must be one of: `coaster`, `keychain`, `tissue-box`, `utility-box`,
-  `wall-hanging`, `wall-panel`, `pen-holder`, `fridge-magnet`, `other`.
-- `price` is in rupees, number only.
-- Put the photo in `assets/img/` and write its file name in `img`.
-  Square photos look best. JPG, PNG or WebP all work.
-- A category with no products shows "coming soon" automatically, and the
-  counts on the filter buttons update by themselves.
+**Setting prices (do this before 13 Oct, 14:14):**
+- `price: 0` means no price yet. After the reveal the card shows
+  "Price on request" and an "Ask to order" button instead of "Add to cart".
+- Write the price in rupees, number only: `price: 450`.
+- If a choice changes the price (a set, a size, a design), put the price on
+  that choice: `{ v: 'Set of 4', price: 750 }`. That price replaces the main price.
+
+**Other things you can change:**
+- `cat` is the shelf: `table`, `home`, `wall`, `wear` or `gifts`.
+- `photos` are files inside `assets/img/shop/`, written without `.webp`.
+  The first is the cover; people swipe or tap the arrows to see the rest.
+  Portrait photos (4:5) look best.
+- `photo: 6` on a choice jumps the slider to photo 6 when that choice is picked.
+- `ask: 'Name to paint'` adds a text box (used for the key chain and wall hanging).
+- `status: 'soon'` shows the product as "In progress". When it is ready, delete
+  that line and add `price`, `photos` and any `options`.
+- Kurta colours: add `{ label: 'Colour', values: ['Royal blue', 'Maroon'] }`
+  inside the kurta's `options` (there's a note showing where).
 
 To change currency rates, edit `rates` in `config.js`.
 
