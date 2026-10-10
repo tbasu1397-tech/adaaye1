@@ -86,53 +86,205 @@
   var lockedText = 'Coming ' + revealLabel;
 
   /* ---------- shop ---------- */
+  var SHOP_IMG = IMG + 'shop/';
+  function valuesOf(o) {
+    return (o.values || []).map(function (v) { return typeof v === 'object' ? v : { v: String(v) }; });
+  }
+  function photoUrl(name) { return SHOP_IMG + name + '.webp'; }
+  var state = PRODUCTS.map(function (p) {
+    return { sel: (p.options || []).map(function () { return 0; }), ask: '' };
+  });
+  function chosen(i) {
+    var p = PRODUCTS[i];
+    return (p.options || []).map(function (o, k) { return { label: o.label, val: valuesOf(o)[state[i].sel[k]] || {} }; });
+  }
+  function priceOf(i) {
+    var price = +PRODUCTS[i].price || 0;
+    chosen(i).forEach(function (c) { if (+c.val.price > 0) price = +c.val.price; });
+    return price;
+  }
+  function optsText(i) {
+    return chosen(i).map(function (c) { return c.val.v; }).filter(Boolean).join(', ');
+  }
+  function askLine(i) {
+    var p = PRODUCTS[i], t = state[i].ask.trim();
+    return p.ask && t ? p.ask + ': ' + t : '';
+  }
+  function askLink(i, soon) {
+    var p = PRODUCTS[i], o = optsText(i), a = askLine(i);
+    var text = soon
+      ? "Hi Adaaye! I'd love to know when the " + p.name + ' is ready.'
+      : "Hi Adaaye! I'd like to order the " + p.name + (o ? ' (' + o + ')' : '') + '.' + (a ? ' ' + a + '.' : '') + ' Could you share the price?';
+    if (hasWa) return waLink(text);
+    if (hasMail) return mailLink((soon ? 'About the ' : 'Order: ') + p.name, text);
+    return igUrl;
+  }
+
   var shelves = $('#shelves');
   if (shelves) {
     var pills = $('#pills');
     var html = '';
     var pillHtml = '<button class="pill" type="button" data-cat="all" aria-pressed="true">All<b>' + PRODUCTS.length + '</b></button>';
 
+    var card = function (p) {
+      var i = PRODUCTS.indexOf(p);
+      var soon = p.status === 'soon' || !(p.photos && p.photos.length);
+      var out = '<article class="piece' + (soon ? ' piece--soon' : '') + '" data-i="' + i + '">';
+      if (soon) {
+        out += '<div class="piece-photo piece-easel"><span class="badge">In progress</span>' +
+          '<p>On the easel</p></div>';
+      } else {
+        var n = p.photos.length;
+        out += '<div class="gal' + (p.fit === 'contain' ? ' gal--contain' : '') + '">' +
+          '<div class="gal-track" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Photos of ' + esc(p.name) + '">' +
+          p.photos.map(function (ph, k) {
+            return '<div class="gal-slide" role="group" aria-label="Photo ' + (k + 1) + ' of ' + n + '">' +
+              '<img src="' + photoUrl(ph) + '" alt="' + (k === 0 ? esc(p.name) + ', hand-painted by Adaaye' : '') + '" loading="lazy" decoding="async" width="880" height="1100" draggable="false"></div>';
+          }).join('') + '</div>';
+        if (n > 1) {
+          out += '<button class="gal-btn gal-prev" type="button" aria-label="Previous photo" disabled>&#8249;</button>' +
+            '<button class="gal-btn gal-next" type="button" aria-label="Next photo">&#8250;</button>' +
+            '<div class="gal-dots" aria-hidden="true">' + p.photos.map(function (x, k) { return '<span' + (k === 0 ? ' class="on"' : '') + '></span>'; }).join('') + '</div>' +
+            '<span class="gal-count" aria-live="polite">1 / ' + n + '</span>';
+        }
+        out += '</div>';
+      }
+      out += '<h4>' + esc(p.name) + '</h4>' +
+        '<p class="piece-style">' + esc(p.style || '') + (p.note ? '. ' + esc(p.note) : '') + '</p>';
+      if (!soon) {
+        (p.options || []).forEach(function (o, k) {
+          out += '<div class="opt" role="group" aria-label="' + esc(o.label) + '"><span class="opt-label">' + esc(o.label) + '</span><div class="chips">' +
+            valuesOf(o).map(function (v, j) {
+              return '<button class="chip" type="button" data-opt="' + k + '" data-val="' + j + '" aria-pressed="' + (j === 0 ? 'true' : 'false') + '">' + esc(v.v) + '</button>';
+            }).join('') + '</div></div>';
+        });
+        if (p.ask) out += '<label class="ask"><span class="opt-label">' + esc(p.ask) + '</span><input type="text" maxlength="40" data-ask placeholder="Type here"></label>';
+      }
+      out += '<div class="piece-foot"></div></article>';
+      return out;
+    };
+
     CATS.forEach(function (cat) {
       var items = PRODUCTS.filter(function (p) { return p.cat === cat.id; });
-      if (cat.id === 'other' && !items.length) return;
+      if (!items.length) return;
+      var ready = items.filter(function (p) { return p.status !== 'soon'; }).length;
       pillHtml += '<button class="pill" type="button" data-cat="' + esc(cat.id) + '" aria-pressed="false">' +
         esc(cat.short || cat.name) + '<b>' + items.length + '</b></button>';
-
       html += '<section class="shelf" data-shelf="' + esc(cat.id) + '" id="shop-' + esc(cat.id) + '">' +
         '<div class="shelf-head"><h3>' + esc(cat.name) + '</h3>' +
-        '<span class="shelf-count">' + (items.length ? items.length + (items.length === 1 ? ' piece' : ' pieces') : 'Coming soon') + '</span>' +
-        '<p>' + esc(cat.blurb) + '</p></div>';
-
-      if (items.length) {
-        html += '<div class="grid">' + items.map(function (p) {
-          var i = PRODUCTS.indexOf(p);
-          return '<article class="piece">' +
-            '<div class="piece-photo"><img src="' + IMG + esc(p.img) + '" alt="' + esc(p.name) + ', hand-painted by Adaaye" loading="lazy" width="600" height="600"></div>' +
-            '<h4>' + esc(p.name) + '</h4>' +
-            '<p class="piece-style">' + esc(p.style || '') + (p.note ? '. ' + esc(p.note) : '') + '</p>' +
-            '<div class="piece-foot">' + (pricesLive()
-              ? '<span class="price" data-inr="' + p.price + '">' + shown(p.price) + '</span>' +
-                '<button class="add" type="button" data-add="' + i + '">Add to cart</button>'
-              : '<span class="price price--locked" data-inr="' + p.price + '" aria-label="Price revealed ' + esc(revealLabel) + '">₹ · · ·</span>' +
-                '<button class="add" type="button" data-add="' + i + '" disabled>' + esc(lockedText) + '</button>') + '</div>' +
-            '</article>';
-        }).join('') + '</div>';
-      } else {
-        html += '<div class="soon"><strong>' + esc(cat.plural || cat.name) + ' are on the easel.</strong>' +
-          'Want one made for you? <a class="link" data-soon="' + esc(cat.name) + '" href="' + igUrl + '" target="_blank" rel="noopener">Message us to order</a>.</div>';
-      }
-      html += '</section>';
+        '<span class="shelf-count">' + (ready ? ready + (ready === 1 ? ' piece' : ' pieces') : 'Coming soon') +
+        (items.length > ready ? ' · ' + (items.length - ready) + ' in progress' : '') + '</span>' +
+        '<p>' + esc(cat.blurb) + '</p></div>' +
+        '<div class="grid">' + items.map(card).join('') + '</div></section>';
     });
 
     shelves.innerHTML = html;
     pills.innerHTML = pillHtml;
 
-    // "coming soon" links go to WhatsApp when it is set up, otherwise Instagram
-    if (hasWa) {
-      $$('[data-soon]', shelves).forEach(function (a) {
-        a.href = waLink("Hi Adaaye! I'd like to order a hand-painted " + a.getAttribute('data-soon').toLowerCase() + '.');
+    var foot = function (i) {
+      var el = $('.piece[data-i="' + i + '"] .piece-foot', shelves);
+      if (!el) return;
+      var p = PRODUCTS[i];
+      if (p.status === 'soon' || !(p.photos && p.photos.length)) {
+        el.innerHTML = '<span class="price price--soon">Coming soon</span>' +
+          '<a class="add" target="_blank" rel="noopener" href="' + esc(askLink(i, true)) + '">Notify me</a>';
+        return;
+      }
+      var price = priceOf(i);
+      if (!pricesLive()) {
+        el.innerHTML = '<span class="price price--locked" aria-label="Price revealed ' + esc(revealLabel) + '">₹ · · ·</span>' +
+          '<button class="add" type="button" disabled>' + esc(lockedText) + '</button>';
+      } else if (price > 0) {
+        el.innerHTML = '<span class="price" data-inr="' + price + '">' + shown(price) + '</span>' +
+          '<button class="add" type="button" data-add="' + i + '">Add to cart</button>';
+      } else {
+        el.innerHTML = '<span class="price price--ask">Price on request</span>' +
+          '<a class="add" target="_blank" rel="noopener" data-askbtn="' + i + '" href="' + esc(askLink(i)) + '">Ask to order</a>';
+      }
+    };
+    var allFeet = function () { PRODUCTS.forEach(function (p, i) { foot(i); }); };
+    allFeet();
+
+    /* swipe galleries */
+    $$('.gal', shelves).forEach(function (g) {
+      var track = $('.gal-track', g), dots = $$('.gal-dots span', g), count = $('.gal-count', g);
+      var prev = $('.gal-prev', g), next = $('.gal-next', g);
+      var n = $$('.gal-slide', g).length;
+      if (n < 2) return;
+      var at = function () { return Math.round(track.scrollLeft / Math.max(1, track.clientWidth)); };
+      var go = function (k) {
+        k = Math.max(0, Math.min(n - 1, k));
+        track.scrollTo({ left: k * track.clientWidth, behavior: 'smooth' });
+      };
+      g.goTo = go;
+      var sync = function () {
+        var k = at();
+        dots.forEach(function (d, j) { d.className = j === k ? 'on' : ''; });
+        if (count) count.textContent = (k + 1) + ' / ' + n;
+        prev.disabled = k === 0; next.disabled = k === n - 1;
+      };
+      var raf = 0;
+      track.addEventListener('scroll', function () { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive: true });
+      prev.addEventListener('click', function () { go(at() - 1); });
+      next.addEventListener('click', function () { go(at() + 1); });
+      track.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(at() + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(at() - 1); }
       });
-    }
+      // drag with the mouse on desktop
+      var down = false, startX = 0, startLeft = 0, moved = false;
+      track.addEventListener('mousedown', function (e) { down = true; moved = false; startX = e.pageX; startLeft = track.scrollLeft; track.classList.add('is-drag'); });
+      window.addEventListener('mousemove', function (e) {
+        if (!down) return;
+        var dx = e.pageX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startLeft - dx;
+      });
+      window.addEventListener('mouseup', function (e) {
+        if (!down) return;
+        down = false; track.classList.remove('is-drag');
+        var dx = e.pageX - startX, k = Math.round(startLeft / Math.max(1, track.clientWidth));
+        go(Math.abs(dx) > track.clientWidth * 0.15 ? k + (dx < 0 ? 1 : -1) : k);
+      });
+      window.addEventListener('resize', function () { track.scrollLeft = at() * track.clientWidth; });
+    });
+
+    /* option chips, personal text */
+    shelves.addEventListener('click', function (e) {
+      var chip = e.target.closest('.chip');
+      if (chip) {
+        var pc = chip.closest('.piece'), i = +pc.getAttribute('data-i');
+        var k = +chip.getAttribute('data-opt'), j = +chip.getAttribute('data-val');
+        state[i].sel[k] = j;
+        $$('.chip[data-opt="' + k + '"]', pc).forEach(function (c) { c.setAttribute('aria-pressed', c === chip ? 'true' : 'false'); });
+        var v = valuesOf(PRODUCTS[i].options[k])[j];
+        var g = $('.gal', pc);
+        if (v && v.photo && g && g.goTo) g.goTo(v.photo - 1);
+        foot(i);
+        return;
+      }
+      var btn = e.target.closest('[data-add]');
+      if (!btn || btn.disabled || !pricesLive()) return;
+      var idx = +btn.getAttribute('data-add'), p = PRODUCTS[idx];
+      if (p.ask && !state[idx].ask.trim()) {
+        var inp = $('.piece[data-i="' + idx + '"] [data-ask]', shelves);
+        inp.setAttribute('aria-invalid', 'true'); inp.focus();
+        inp.placeholder = 'Please fill this in';
+        return;
+      }
+      addToCart(idx);
+      btn.textContent = 'Added';
+      btn.classList.add('is-added');
+      setTimeout(function () { btn.textContent = 'Add to cart'; btn.classList.remove('is-added'); }, 1400);
+    });
+    shelves.addEventListener('input', function (e) {
+      if (!e.target.hasAttribute('data-ask')) return;
+      var i = +e.target.closest('.piece').getAttribute('data-i');
+      state[i].ask = e.target.value;
+      e.target.removeAttribute('aria-invalid');
+      var a = $('.piece[data-i="' + i + '"] [data-askbtn]', shelves);
+      if (a) a.href = askLink(i);
+    });
 
     pills.addEventListener('click', function (e) {
       var btn = e.target.closest('.pill');
@@ -176,23 +328,9 @@
         clearInterval(timer);
         var bar = $('#revealBar'); if (bar) bar.remove();
         if (currencyLabel) currencyLabel.hidden = false;
-        $$('.price--locked', shelves).forEach(function (el) {
-          el.classList.remove('price--locked'); el.removeAttribute('aria-label');
-          el.textContent = shown(parseFloat(el.getAttribute('data-inr')));
-        });
-        $$('[data-add]', shelves).forEach(function (b) { b.disabled = false; b.textContent = 'Add to cart'; });
+        allFeet();
       }
     }
-
-    shelves.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-add]');
-      if (!btn || btn.disabled || !pricesLive()) return;
-      var p = PRODUCTS[+btn.getAttribute('data-add')];
-      addToCart(p);
-      btn.textContent = 'Added';
-      btn.classList.add('is-added');
-      setTimeout(function () { btn.textContent = 'Add to cart'; btn.classList.remove('is-added'); }, 1400);
-    });
   }
 
   /* ---------- favourites: a hand of cards ---------- */
@@ -252,9 +390,9 @@
      CART
      ======================================================= */
   var cart = [];
-  try { cart = JSON.parse(localStorage.getItem('adaaye-cart') || '[]') || []; } catch (e) { cart = []; }
+  try { cart = JSON.parse(localStorage.getItem('adaaye-cart-v2') || '[]') || []; } catch (e) { cart = []; }
   if (!Array.isArray(cart)) cart = [];
-  function save() { try { localStorage.setItem('adaaye-cart', JSON.stringify(cart)); } catch (e) {} }
+  function save() { try { localStorage.setItem('adaaye-cart-v2', JSON.stringify(cart)); } catch (e) {} }
   function count() { return cart.reduce(function (s, i) { return s + i.qty; }, 0); }
   function total() { return cart.reduce(function (s, i) { return s + i.price * i.qty; }, 0); }
 
@@ -336,7 +474,9 @@
     } else {
       lines.innerHTML = cart.map(function (item, i) {
         return '<div class="line"><img src="' + esc(item.img) + '" alt="">' +
-          '<div><p class="line-name">' + esc(item.name) + '</p><p class="line-price">' + rupees(item.price) + '</p>' +
+          '<div><p class="line-name">' + esc(item.name) + '</p>' +
+          (item.opts || item.extra ? '<p class="line-opts">' + esc([item.opts, item.extra].filter(Boolean).join(' · ')) + '</p>' : '') +
+          '<p class="line-price">' + rupees(item.price) + '</p>' +
           '<div class="qty"><button type="button" data-dec="' + i + '" aria-label="One less">&minus;</button><span>' + item.qty + '</span>' +
           '<button type="button" data-inc="' + i + '" aria-label="One more">+</button>' +
           '<button type="button" class="remove" data-rm="' + i + '">Remove</button></div></div></div>';
@@ -346,11 +486,16 @@
     $('#toDetails').disabled = !cart.length;
     save();
   }
-  function addToCart(p) {
-    var found = cart.filter(function (i) { return i.name === p.name; })[0];
+  function addToCart(i) {
+    var p = PRODUCTS[i], opts = optsText(i), extra = askLine(i);
+    var key = p.name + '|' + opts + '|' + extra;
+    var found = cart.filter(function (c) { return c.key === key; })[0];
     if (found) found.qty += 1;
-    else cart.push({ name: p.name, price: p.price, img: IMG + p.img, qty: 1 });
+    else cart.push({ key: key, name: p.name, opts: opts, extra: extra, price: priceOf(i), img: photoUrl(p.photos[0]), qty: 1 });
     renderCart();
+  }
+  function lineName(item) {
+    return item.name + (item.opts ? ' (' + item.opts + ')' : '') + (item.extra ? ', ' + item.extra : '');
   }
   $('#cartLines').addEventListener('click', function (e) {
     var b = e.target.closest('button');
@@ -387,7 +532,7 @@
 
   /* ---------- order text ---------- */
   function orderText() {
-    var items = cart.map(function (i) { return '- ' + i.name + ' x' + i.qty + ' (' + rupees(i.price * i.qty) + ')'; }).join('\n');
+    var items = cart.map(function (i) { return '- ' + lineName(i) + ' x' + i.qty + ' (' + rupees(i.price * i.qty) + ')'; }).join('\n');
     var email = val('cEmail');
     return "Hi Adaaye! I'd like to place this order:\n\n" + items +
       '\n\nTotal: ' + rupees(total()) +
@@ -402,7 +547,7 @@
   function renderPay() {
     var amount = Math.round(total());
     $('#summary').innerHTML = cart.map(function (i) {
-      return '<li><span>' + esc(i.name) + ' &times; ' + i.qty + '</span><span>' + rupees(i.price * i.qty) + '</span></li>';
+      return '<li><span>' + esc(lineName(i)) + ' &times; ' + i.qty + '</span><span>' + rupees(i.price * i.qty) + '</span></li>';
     }).join('') + '<li><span>Total</span><span>' + rupees(amount) + '</span></li>';
 
     var pay = $('#payBox');
