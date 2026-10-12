@@ -172,7 +172,7 @@ window.ADAAYE_PRODUCTS = [
   /* ---------------- 12. Kurta ---------------- */
   { no: 12, name: 'Male Designer Kurta', cat: 'wear', style: 'Royal blue cotton, long sleeves, hand-painted yoke',
     price: 0, note: 'More colours coming soon.',
-    photos: ['kurta-1', 'kurta-2', 'kurta-3', 'kurta-4', 'kurta-5', 'kurta-6'],
+    photos: ['kurta-male-1', 'kurta-male-2', 'kurta-male-3', 'kurta-male-4', 'kurta-male-5', 'kurta-male-6'],
     options: [
       { label: 'Size', values: SIZES }
       // colour choice will be added here, for example:
@@ -192,6 +192,11 @@ window.ADAAYE_PRODUCTS = [
         { v: 'Set of 2 (red + orange)', photo: 1, price: 0 } ] }
     ] },
 
+  /* ---------------- 16. Tissue box ---------------- */
+  { no: 16, name: 'Hand-Painted Tissue Box', cat: 'home', style: 'Fluid-art wooden box with brass latch',
+    price: 0,
+    photos: ['tissue-box-1', 'tissue-box-2', 'tissue-box-3', 'tissue-box-4', 'tissue-box-5', 'tissue-box-6'] },
+
   /* ---------------- 22. Pen stand / cutlery stand ---------------- */
   { no: 22, name: 'Leaf Pen & Cutlery Stand', cat: 'home', style: 'Hand-painted wooden stand',
     price: 0,
@@ -200,7 +205,6 @@ window.ADAAYE_PRODUCTS = [
   /* ---------------- In progress (no photos yet) ---------------- */
   { no: 14, name: 'Earthen Planters', cat: 'home', style: 'Painted clay planters', status: 'soon' },
   { no: 15, name: 'Earthen Lunch Set', cat: 'table', style: 'For weddings and special occasions', status: 'soon' },
-  { no: 16, name: 'Tissue Box', cat: 'home', style: 'Hand-painted tissue box', status: 'soon' },
   { no: 17, name: 'Name Plate', cat: 'home', style: 'Personalised, for your door', status: 'soon' },
   { no: 18, name: 'Wooden Kitchen Décor', cat: 'table', style: 'Painted wood for the kitchen', status: 'soon' },
   { no: 19, name: 'Table Runner', cat: 'table', style: 'Single runner, painted by hand', status: 'soon' },
