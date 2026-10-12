@@ -170,11 +170,10 @@ window.ADAAYE_PRODUCTS = [
     ] },
 
   /* ---------------- 12. Kurta ---------------- */
-  { no: 12, name: 'Hand-Painted Kurta', cat: 'wear', style: 'Royal blue cotton, painted yoke',
+  { no: 12, name: 'Male Designer Kurta', cat: 'wear', style: 'Royal blue cotton, long sleeves, hand-painted yoke',
     price: 0, note: 'More colours coming soon.',
     photos: ['kurta-1', 'kurta-2', 'kurta-3', 'kurta-4', 'kurta-5', 'kurta-6'],
     options: [
-      { label: 'For', values: ['Male', 'Female'] },
       { label: 'Size', values: SIZES }
       // colour choice will be added here, for example:
       // , { label: 'Colour', values: ['Royal blue', 'Maroon'] }
