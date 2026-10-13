@@ -49,32 +49,31 @@ var SIZES = ['S', 'M', 'L', 'XL'];
 window.ADAAYE_PRODUCTS = [
 
   /* ---------------- 1. Coaster ---------------- */
-  { no: 1, name: 'Peacock Coasters', cat: 'table', style: 'Madhubani peacock on wood',
-    price: 0,
+  { no: 1, name: 'Peacock Coasters', cat: 'table', style: 'Madhubani peacock, resin finish',
+    price: 399,
     photos: ['coaster-1', 'coaster-2', 'coaster-3', 'coaster-4', 'coaster-5', 'coaster-6'],
     options: [
       { label: 'Shape', values: ['Round', 'Square'] },
       { label: 'Set', values: [
-        { v: 'Set of 2', price: 0 },
-        { v: 'Set of 4', price: 0 },
-        { v: 'Set of 6', price: 0 },
-        { v: 'Set of 8', price: 0 } ] }
+        { v: 'Set of 2', price: 399 },
+        { v: 'Set of 4', price: 799 },
+        { v: 'Set of 6', price: 999 } ] }
     ] },
 
   /* ---------------- 2. Bookmarks ---------------- */
   { no: 2, name: 'Hand-Painted Bookmarks', cat: 'gifts', style: 'Folk florals on card',
-    price: 0,
+    price: 99,
     photos: ['bookmark-1', 'bookmark-2', 'bookmark-3', 'bookmark-4', 'bookmark-5', 'bookmark-6'],
     options: [
       { label: 'Design', values: [
-        { v: 'Mint wildflower', photo: 4 },
-        { v: 'Marigold vine', photo: 3 },
-        { v: 'Pair of both', photo: 1 } ] }
+        { v: 'Mint wildflower', photo: 4, price: 99 },
+        { v: 'Marigold vine', photo: 3, price: 99 },
+        { v: 'Set of 2 (both)', photo: 1, price: 149 } ] }
     ] },
 
   /* ---------------- 3. Key chain ---------------- */
   { no: 3, name: 'Personalised Key Chain', cat: 'gifts', style: 'Your name, painted by hand',
-    price: 0,
+    price: 119,
     photos: ['keychain-1', 'keychain-2', 'keychain-3', 'keychain-4', 'keychain-5', 'keychain-6'],
     options: [
       { label: 'Shape', values: [
@@ -84,47 +83,41 @@ window.ADAAYE_PRODUCTS = [
     ask: 'Name to paint' },
 
   /* ---------------- 4. Utility box ---------------- */
-  { no: 4, name: 'Mirror-Work Utility Box', cat: 'home', style: 'Hand-painted wooden keepsake box',
-    price: 0, note: 'Available in different sizes.',
+  { no: 4, name: 'Mirror-Work Utility Box', cat: 'home', style: 'Hand-painted wooden keepsake box, resin finish',
+    price: 499, note: 'Available in different sizes.',
     photos: ['utility-box-1', 'utility-box-2', 'utility-box-3', 'utility-box-4', 'utility-box-5', 'utility-box-6'],
     options: [
       { label: 'Size', values: [
-        { v: 'Small', price: 0 },
-        { v: 'Medium', price: 0 },
-        { v: 'Large', price: 0 } ] }
+        { v: 'Small', price: 499 },
+        { v: 'Medium', price: 699 },
+        { v: 'Large', price: 899 } ] }
     ] },
 
   /* ---------------- 5. Bottle lamp ---------------- */
   { no: 5, name: 'Lotus Bottle Lamp', cat: 'home', style: 'Upcycled glass, painted by hand',
-    price: 0, note: 'Available in different sizes.', fit: 'contain',
-    photos: ['bottle-lamp-1', 'bottle-lamp-2', 'bottle-lamp-3', 'bottle-lamp-4'],
-    options: [
-      { label: 'Size', values: [
-        { v: 'Small', price: 0 },
-        { v: 'Medium', price: 0 },
-        { v: 'Large', price: 0 } ] }
-    ] },
+    price: 399, note: 'Other sizes on request.', fit: 'contain',
+    photos: ['bottle-lamp-1', 'bottle-lamp-2', 'bottle-lamp-3', 'bottle-lamp-4'] },
 
   /* ---------------- 6. Greeting cards ---------------- */
   { no: 6, name: 'Hand-Painted Greeting Card', cat: 'gifts', style: 'One of a kind, painted on card',
-    price: 0,
+    price: 299,
     photos: ['card-tanpura-1', 'card-tanpura-2', 'card-tanpura-3', 'card-tanpura-4', 'card-tanpura-5',
              'card-floral-1', 'card-floral-2', 'card-floral-3', 'card-floral-4', 'card-floral-5'],
     options: [
       { label: 'Design', values: [
-        { v: 'Woman with tanpura', photo: 1, price: 0 },
-        { v: 'Floral gatefold', photo: 6, price: 0 } ] }
+        { v: 'Woman with tanpura', photo: 1, price: 299 },
+        { v: 'Floral gatefold', photo: 6, price: 299 } ] }
     ] },
 
   /* ---------------- 7. MDF wall hanging ---------------- */
   { no: 7, name: '"Our Forever" Wall Hanging', cat: 'wall', style: 'Personalised couple art on MDF',
-    price: 0, note: 'Painted with your initials.',
+    price: 799, note: 'Painted with your initials.',
     photos: ['wall-hanging-1', 'wall-hanging-2', 'wall-hanging-3', 'wall-hanging-4', 'wall-hanging-5'],
     ask: 'Initials or names' },
 
   /* ---------------- 8. Tea tray ---------------- */
   { no: 8, name: 'Hand-Painted Tea Tray', cat: 'table', style: 'Wooden serving tray',
-    price: 0, note: 'Available in different sizes.',
+    price: 499, note: 'Available in different sizes.',
     photos: ['tray-lotus-1', 'tray-lotus-2', 'tray-lotus-3', 'tray-lotus-4', 'tray-lotus-5',
              'tray-fish-1', 'tray-fish-2', 'tray-fish-3', 'tray-fish-4'],
     options: [
@@ -132,26 +125,19 @@ window.ADAAYE_PRODUCTS = [
         { v: 'Yellow lotus', photo: 1 },
         { v: 'Madhubani fish', photo: 6 } ] },
       { label: 'Size', values: [
-        { v: 'Small', price: 0 },
-        { v: 'Medium', price: 0 },
-        { v: 'Large', price: 0 } ] }
+        { v: 'Small', price: 499 },
+        { v: 'Medium', price: 699 },
+        { v: 'Large', price: 899 } ] }
     ] },
 
   /* ---------------- 9. Fluid art canvas ---------------- */
-  { no: 9, name: 'Fluid Art Mini Canvas', cat: 'wall', style: 'Acrylic pour on canvas, with stand',
-    price: 0, fit: 'contain',
-    photos: ['fluid-canvas-1', 'fluid-canvas-2', 'fluid-canvas-3', 'fluid-canvas-4', 'fluid-canvas-5', 'fluid-canvas-6'],
-    options: [
-      { label: 'Choose', values: [
-        { v: 'Set of 3', photo: 1, price: 0 },
-        { v: 'Single: Crimson', photo: 3, price: 0 },
-        { v: 'Single: Ocean blue', photo: 4, price: 0 },
-        { v: 'Single: Black & gold', photo: 5, price: 0 } ] }
-    ] },
+  { no: 9, name: 'Fluid Art Mini Canvas', cat: 'wall', style: 'Set of 3 acrylic pour canvases, with stands',
+    price: 1499, note: 'Single canvases on request.', fit: 'contain',
+    photos: ['fluid-canvas-1', 'fluid-canvas-2', 'fluid-canvas-3', 'fluid-canvas-4', 'fluid-canvas-5', 'fluid-canvas-6'] },
 
   /* ---------------- 10. T-shirt ---------------- */
   { no: 10, name: 'Fish Story T-Shirt', cat: 'wear', style: 'Black cotton tee, folk fish motif',
-    price: 0,
+    price: 699,
     photos: ['tshirt-1', 'tshirt-2', 'tshirt-3', 'tshirt-4', 'tshirt-5', 'tshirt-6'],
     options: [
       { label: 'Size', values: SIZES },
@@ -160,18 +146,18 @@ window.ADAAYE_PRODUCTS = [
 
   /* ---------------- 11. Hand-painted art ---------------- */
   { no: 11, name: 'Hand-Painted Art', cat: 'wall', style: 'Original paintings, one of each',
-    price: 0,
+    price: 1299, note: 'Sold without frame.',
     photos: ['art-durga-ganesha-1', 'art-durga-ganesha-2', 'art-durga-hands-1', 'art-durga-hands-2', 'art-ganesha-1', 'art-ganesha-2'],
     options: [
       { label: 'Painting', values: [
-        { v: 'Maa Durga with Ganesha', photo: 1, price: 0 },
-        { v: 'Durga hands with lotus', photo: 3, price: 0 },
-        { v: 'Red abstract Ganesha', photo: 5, price: 0 } ] }
+        { v: 'Maa Durga with Ganesha', photo: 1, price: 1299 },
+        { v: 'Durga hands with lotus', photo: 3, price: 1199 },
+        { v: 'Red abstract Ganesha', photo: 5, price: 799 } ] }
     ] },
 
   /* ---------------- 12. Kurta ---------------- */
   { no: 12, name: 'Male Designer Kurta', cat: 'wear', style: 'Royal blue cotton, long sleeves, hand-painted yoke',
-    price: 0, note: 'More colours coming soon.',
+    price: 899, note: 'More colours coming soon.',
     photos: ['kurta-male-1', 'kurta-male-2', 'kurta-male-3', 'kurta-male-4', 'kurta-male-5', 'kurta-male-6'],
     options: [
       { label: 'Size', values: SIZES }
@@ -181,25 +167,25 @@ window.ADAAYE_PRODUCTS = [
 
   /* ---------------- 13. Small earthen plates ---------------- */
   { no: 13, name: 'Lotus Earthen Plate', cat: 'table', style: 'Small clay plate, painted lotus',
-    price: 0,
+    price: 299,
     photos: ['earthen-plate-1', 'earthen-plate-2', 'earthen-plate-3', 'earthen-plate-4', 'earthen-plate-5', 'earthen-plate-6'],
     options: [
       { label: 'Design', values: [
         { v: 'Red', photo: 2 },
         { v: 'Orange', photo: 3 } ] },
       { label: 'Pack', values: [
-        { v: 'Single', price: 0 },
-        { v: 'Set of 2 (red + orange)', photo: 1, price: 0 } ] }
+        { v: 'Single', price: 299 },
+        { v: 'Set of 2 (red + orange)', photo: 1, price: 549 } ] }
     ] },
 
   /* ---------------- 16. Tissue box ---------------- */
   { no: 16, name: 'Hand-Painted Tissue Box', cat: 'home', style: 'Fluid-art wooden box with brass latch',
-    price: 0,
+    price: 499,
     photos: ['tissue-box-1', 'tissue-box-2', 'tissue-box-3', 'tissue-box-4', 'tissue-box-5', 'tissue-box-6'] },
 
   /* ---------------- 22. Pen stand / cutlery stand ---------------- */
   { no: 22, name: 'Leaf Pen & Cutlery Stand', cat: 'home', style: 'Hand-painted wooden stand',
-    price: 0,
+    price: 399,
     photos: ['pen-stand-1', 'pen-stand-2', 'pen-stand-3', 'pen-stand-4', 'pen-stand-5', 'pen-stand-6'] },
 
   /* ---------------- In progress (no photos yet) ---------------- */
