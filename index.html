@@ -219,24 +219,30 @@
   </div>
 </section>
 
-<section class="panel" id="favourites">
+<section class="panel fav3d" id="favourites">
+  <div class="motes" aria-hidden="true"></div>
   <div class="wrap">
     <div class="head">
-      <h2>A few favourites, fanned out.</h2>
-      <p>Hover on desktop, tap on your phone. Each piece steps forward and the rest make room, the way a hand of cards opens.</p>
+      <p class="eyebrow">Our favourites</p>
+      <h2>A few favourites, in the round.</h2>
+      <p>A slow turn through the pieces we love most. Drag to spin, or tap a piece to bring it forward.</p>
     </div>
-    <div class="fan-stage">
-      <div class="fan-deck" id="fanDeck">
-        <button class="fan-card" type="button" data-name="Peacock Coasters" aria-label="Peacock Coasters" aria-pressed="false"><img src="assets/img/shop/coaster-4.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Tanpura Greeting Card" aria-label="Tanpura Greeting Card" aria-pressed="false"><img src="assets/img/shop/card-tanpura-1.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Madhubani Fish Tea Tray" aria-label="Madhubani Fish Tea Tray" aria-pressed="false"><img src="assets/img/shop/tray-fish-1.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Maa Durga with Ganesha" aria-label="Maa Durga with Ganesha" aria-pressed="false"><img src="assets/img/shop/art-durga-ganesha-1.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Male Designer Kurta" aria-label="Male Designer Kurta" aria-pressed="false"><img src="assets/img/shop/kurta-male-2.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Lotus Earthen Plate" aria-label="Lotus Earthen Plate" aria-pressed="false"><img src="assets/img/shop/earthen-plate-3.webp" alt="" loading="lazy" draggable="false"></button>
-        <button class="fan-card" type="button" data-name="Leaf Pen Stand" aria-label="Leaf Pen Stand" aria-pressed="false"><img src="assets/img/shop/pen-stand-3.webp" alt="" loading="lazy" draggable="false"></button>
+    <div class="ring-stage" id="ringStage">
+      <div class="ring" id="ring">
+        <button class="r-card" type="button" data-name="Peacock Coasters" data-price="From ₹399" data-cat="table" aria-label="Peacock Coasters"><span class="r-frame"><img src="assets/img/shop/coaster-4.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Tanpura Greeting Card" data-price="₹299" data-cat="gifts" aria-label="Tanpura Greeting Card"><span class="r-frame"><img src="assets/img/shop/card-tanpura-1.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Madhubani Fish Tea Tray" data-price="From ₹499" data-cat="table" aria-label="Madhubani Fish Tea Tray"><span class="r-frame"><img src="assets/img/shop/tray-fish-1.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Maa Durga with Ganesha" data-price="₹1,299" data-cat="wall" aria-label="Maa Durga with Ganesha"><span class="r-frame"><img src="assets/img/shop/art-durga-ganesha-1.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Male Designer Kurta" data-price="₹899" data-cat="wear" aria-label="Male Designer Kurta"><span class="r-frame"><img src="assets/img/shop/kurta-male-2.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Lotus Earthen Plate" data-price="From ₹299" data-cat="table" aria-label="Lotus Earthen Plate"><span class="r-frame"><img src="assets/img/shop/earthen-plate-3.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Hand-Painted Tissue Box" data-price="₹499" data-cat="home" aria-label="Hand-Painted Tissue Box"><span class="r-frame"><img src="assets/img/shop/tissue-box-1.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Leaf Pen &amp; Cutlery Stand" data-price="₹399" data-cat="home" aria-label="Leaf Pen &amp; Cutlery Stand"><span class="r-frame"><img src="assets/img/shop/pen-stand-3.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
+        <button class="r-card" type="button" data-name="Mirror-Work Utility Box" data-price="From ₹499" data-cat="home" aria-label="Mirror-Work Utility Box"><span class="r-frame"><img src="assets/img/shop/utility-box-1.webp" alt="" loading="lazy" draggable="false" width="880" height="1100"></span></button>
       </div>
+      <div class="ring-floor" aria-hidden="true"></div>
     </div>
-    <p class="fan-name" id="fanName" aria-live="polite"></p>
+    <div class="ring-caption" aria-live="polite"><h3 id="ringName">&nbsp;</h3><p id="ringMeta">&nbsp;</p></div>
+    <div class="ring-ctrl"><button type="button" id="ringPrev" aria-label="Previous piece">&#8249;</button><button type="button" id="ringNext" aria-label="Next piece">&#8250;</button></div>
   </div>
 </section>
 

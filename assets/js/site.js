@@ -333,35 +333,87 @@
     }
   }
 
-  /* ---------- favourites: a hand of cards ---------- */
-  var deck = $('#fanDeck');
-  if (deck) {
-    var cards = $$('.fan-card', deck), label = $('#fanName');
-    var mid = (cards.length - 1) / 2, active = null;
-    var narrow = function () { return window.innerWidth <= 640; };
-    var layout = function () {
-      cards.forEach(function (card, i) {
-        var d = i - mid, ad = Math.abs(d), spread = narrow() ? 0.5 : 1;
-        var x = d * 4.6 * spread, y = ad * ad * 0.5, rot = d * 9, scale = 1 - 0.055 * ad * ad, z = 10 - Math.round(ad);
-        if (active !== null) {
-          if (i === active) { y -= narrow() ? 1.2 : 2.2; scale = scale * 1.14 + 0.05; rot = 0; z = 20; }
-          else { var k = i - active; x += (k > 0 ? 1 : -1) * (narrow() ? 1 : 2.2) / Math.abs(k); z = 10 - Math.abs(k); }
-        }
-        card.style.transform = 'translate(' + x + 'rem,' + y + 'rem) rotate(' + rot + 'deg) scale(' + scale + ')';
-        card.style.zIndex = z;
-        card.setAttribute('aria-pressed', i === active ? 'true' : 'false');
+  /* ---------- favourites: 3D ring ---------- */
+  var ringEl = $('#ring');
+  if (ringEl) {
+    var rCards = $$('.r-card', ringEl), RN = rCards.length, rStep = 360 / RN;
+    var stage = $('#ringStage'), rName = $('#ringName'), rMeta = $('#ringMeta');
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var rAngle = 0, rTarget = null, rVel = 0, rDrag = false, rMoved = false, rLastX = 0, rHover = false, rShown = -1, rVisible = true;
+    var radius = function () { return Math.max(300, Math.min(520, window.innerWidth * 0.36)); };
+    var R = radius();
+    window.addEventListener('resize', function () { R = radius(); });
+    var draw = function () {
+      var best = 0, bestZ = -2;
+      rCards.forEach(function (c, i) {
+        var a = i * rStep + rAngle, z = Math.cos(a * Math.PI / 180), k = (z + 1) / 2;
+        c.style.transform = 'rotateY(' + a + 'deg) translateZ(' + R + 'px) rotateY(' + (-a * 0.35) + 'deg)';
+        c.style.filter = 'brightness(' + (0.62 + 0.38 * k).toFixed(2) + ') saturate(' + (0.7 + 0.3 * k).toFixed(2) + ') blur(' + ((1 - k) * 1.6).toFixed(2) + 'px)';
+        c.style.zIndex = Math.round(k * 100);
+        c.tabIndex = -1;
+        if (z > bestZ) { bestZ = z; best = i; }
       });
-      if (label) label.textContent = active === null ? '' : cards[active].getAttribute('data-name');
+      rCards[best].tabIndex = 0;
+      if (best !== rShown) {
+        rShown = best;
+        var c = rCards[best];
+        rName.textContent = c.getAttribute('data-name').replace(/&amp;/g, '&');
+        rMeta.innerHTML = (pricesLive() ? esc(c.getAttribute('data-price')) + ' &middot; ' : '') +
+          '<a href="#shop-' + esc(c.getAttribute('data-cat')) + '">See in shop</a>';
+      }
     };
-    cards.forEach(function (card, i) {
-      card.addEventListener('mouseenter', function () { active = i; layout(); });
-      card.addEventListener('focus', function () { active = i; layout(); });
-      card.addEventListener('click', function (e) { e.stopPropagation(); active = (active === i && narrow()) ? null : i; layout(); });
+    var tick = function () {
+      if (rVisible) {
+        if (rTarget !== null) {
+          var d = ((rTarget - rAngle + 540) % 360) - 180;
+          rAngle += d * 0.08;
+          if (Math.abs(d) < 0.05) { rAngle = rTarget; rTarget = null; }
+        } else if (!rDrag) {
+          rAngle += rVel; rVel *= 0.94;
+          if (Math.abs(rVel) < 0.02 && !rHover && !still) rAngle -= 0.12;
+        }
+        draw();
+      }
+      requestAnimationFrame(tick);
+    };
+    var snapTo = function (i) { rTarget = -i * rStep; };
+    rCards.forEach(function (c, i) {
+      c.addEventListener('click', function () { if (!rMoved) snapTo(i); });
+      c.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); snapTo((rShown + 1) % RN); setTimeout(function () { rCards[(rShown) % RN].focus(); }, 450); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); snapTo((rShown - 1 + RN) % RN); setTimeout(function () { rCards[(rShown) % RN].focus(); }, 450); }
+      });
     });
-    deck.addEventListener('mouseleave', function () { active = null; layout(); });
-    document.addEventListener('click', function (e) { if (!deck.contains(e.target)) { active = null; layout(); } });
-    window.addEventListener('resize', layout);
-    layout();
+    $('#ringNext').addEventListener('click', function () { snapTo((rShown + 1) % RN); });
+    $('#ringPrev').addEventListener('click', function () { snapTo((rShown - 1 + RN) % RN); });
+    stage.addEventListener('pointerdown', function (e) { rDrag = true; rMoved = false; rLastX = e.clientX; rTarget = null; rVel = 0; stage.classList.add('is-drag'); });
+    window.addEventListener('pointermove', function (e) {
+      if (!rDrag) return;
+      var dx = e.clientX - rLastX;
+      if (Math.abs(dx) > 2) rMoved = true;
+      rAngle += dx * 0.25; rVel = dx * 0.25; rLastX = e.clientX;
+    });
+    window.addEventListener('pointerup', function () {
+      if (!rDrag) return;
+      rDrag = false; stage.classList.remove('is-drag');
+      setTimeout(function () { rMoved = false; }, 60);
+    });
+    stage.addEventListener('mouseenter', function () { rHover = true; });
+    stage.addEventListener('mouseleave', function () { rHover = false; });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { rVisible = en[0].isIntersecting; }).observe(stage);
+    }
+    var motes = $('.motes');
+    if (motes && !still) {
+      for (var mi = 0; mi < 14; mi++) {
+        var sp = document.createElement('span');
+        sp.style.left = (5 + Math.random() * 90) + '%'; sp.style.top = (55 + Math.random() * 40) + '%';
+        sp.style.animationDelay = (-Math.random() * 9) + 's'; sp.style.animationDuration = (7 + Math.random() * 6) + 's';
+        motes.appendChild(sp);
+      }
+    }
+    draw();
+    requestAnimationFrame(tick);
   }
 
   /* ---------- drop list ---------- */
