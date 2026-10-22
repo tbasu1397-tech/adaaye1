@@ -571,3 +571,9 @@ a.add{ text-decoration:none; display:inline-block; }
 .motes span{ position:absolute; width:4px; height:4px; border-radius:50%; background:rgba(193,137,47,.55); box-shadow:0 0 8px rgba(193,137,47,.6); animation:mote 9s linear infinite; pointer-events:none; }
 @keyframes mote{ from{ transform:translateY(0); opacity:0 } 15%{ opacity:1 } 85%{ opacity:.8 } to{ transform:translateY(-260px); opacity:0 } }
 @media (prefers-reduced-motion:reduce){ .motes{ display:none; } }
+
+/* ---------- hero: arch frame ---------- */
+.arch{ position:relative; padding:14px; background:var(--ivory-light); border-radius:50% 50% 6px 6px / 26% 26% 6px 6px; box-shadow:0 0 0 1px rgba(138,97,66,.7), 0 30px 46px -24px rgba(46,42,38,.5); animation:unroll 1s cubic-bezier(.2,.7,.2,1) .15s both; }
+.arch::before{ content:""; position:absolute; inset:6px; border:1px solid rgba(164,49,42,.45); border-radius:50% 50% 4px 4px / 26% 26% 4px 4px; pointer-events:none; z-index:1; }
+.arch img{ display:block; width:100%; height:auto; aspect-ratio:893/1072; object-fit:cover; border-radius:50% 50% 2px 2px / 25% 25% 2px 2px; }
+@media (prefers-reduced-motion:reduce){ .arch{ animation:none; } }
