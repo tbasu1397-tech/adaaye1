@@ -11,14 +11,14 @@
 
 /* ---------- fonts (bundled, no outside requests) ---------- */
 @font-face{
-  font-family:'Eczar';
-  src:url('../fonts/eczar-latin-wght-normal.woff2') format('woff2');
-  font-weight:400 800; font-style:normal; font-display:swap;
+  font-family:'Playfair Display';
+  src:url('../fonts/playfair-display-latin-wght-normal.woff2') format('woff2');
+  font-weight:400 900; font-style:normal; font-display:swap;
 }
 @font-face{
-  font-family:'Anek Latin';
-  src:url('../fonts/anek-latin-latin-wght-normal.woff2') format('woff2');
-  font-weight:100 800; font-style:normal; font-display:swap;
+  font-family:'Source Sans 3';
+  src:url('../fonts/source-sans-3-latin-wght-normal.woff2') format('woff2');
+  font-weight:200 900; font-style:normal; font-display:swap;
 }
 
 /* ---------- tokens ---------- */
@@ -40,8 +40,8 @@
   --walnut:#75523A;       /* small labels */
   --ink:#2E2A26;
 
-  --display:'Eczar', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --text:'Anek Latin', 'Segoe UI', system-ui, sans-serif;
+  --display:'Playfair Display', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --text:'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
 
   --band:44px;            /* width of the painted side border */
   --gutter:clamp(20px, 5vw, 64px);
@@ -69,7 +69,7 @@ body{
   background-repeat:no-repeat, no-repeat, repeat, repeat, repeat;
   color:var(--ink);
   font-family:var(--text);
-  font-size:1.0625rem;
+  font-size:.96875rem;
   line-height:1.6;
   font-weight:400;
   overflow-x:hidden;
@@ -78,7 +78,7 @@ img{ display:block; max-width:100%; height:auto; }
 a{ color:inherit; }
 p{ margin:0 0 1em; }
 p:last-child{ margin-bottom:0; }
-h1,h2,h3,h4{ font-family:var(--display); font-weight:500; line-height:1.1; letter-spacing:-.012em; margin:0; color:var(--charcoal); text-wrap:balance; }
+h1,h2,h3,h4{ font-family:var(--display); font-weight:500; line-height:1.12; letter-spacing:-.01em; margin:0; color:var(--charcoal); text-wrap:balance; }
 h1{ font-size:clamp(2.5rem, 5.4vw, 4.5rem); }
 h2{ font-size:clamp(1.9rem, 3.4vw, 3rem); }
 h3{ font-size:1.3125rem; line-height:1.2; }
@@ -179,7 +179,7 @@ button{ cursor:pointer; }
 .hero .wrap{ display:grid; gap:clamp(2.2rem, 5vw, 4.5rem); align-items:center; }
 .hero h1{ color:var(--charcoal); }
 .hero h1 em{ font-style:normal; color:var(--sindoor); }
-.hero-lede{ font-size:1.1875rem; line-height:1.6; max-width:34rem; margin:1.5rem 0 2rem; color:#4a443d; }
+.hero-lede{ font-size:1.0625rem; line-height:1.6; max-width:34rem; margin:1.5rem 0 2rem; color:#4a443d; }
 .hero-credit{ margin-top:1.8rem; font-size:.9375rem; color:var(--walnut); }
 .hero-credit::before{ content:""; display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--sindoor); margin-right:.7rem; }
 .mount{ margin:0; background:var(--ivory-light); padding:clamp(10px, 1.4vw, 18px); box-shadow:0 0 0 1px rgba(138,97,66,.7), 0 22px 36px -20px rgba(46,42,38,.45); }
@@ -197,7 +197,7 @@ button{ cursor:pointer; }
 .story-photo .mount{ box-shadow:0 0 0 1px var(--clay); }
 .story-photo img{ aspect-ratio:4/5; object-fit:cover; object-position:50% 20%; }
 .story-photo figcaption{ margin-top:.8rem; font-size:.9375rem; color:var(--walnut); }
-.story-text p{ max-width:var(--measure); font-size:1.125rem; }
+.story-text p{ max-width:var(--measure); font-size:1rem; }
 .signature{ margin-top:2rem; font-family:var(--display); font-size:1.3125rem; line-height:1.35; color:var(--charcoal); padding-left:1.4rem; border-left:3px solid var(--sindoor); }
 @media (min-width:860px){ .story-grid{ grid-template-columns:minmax(0,22rem) 1fr; } }
 
@@ -350,7 +350,7 @@ a.add{ text-decoration:none; display:inline-block; }
 .hampers{ position:relative; isolation:isolate; background:var(--indigo); }
 .hampers::before{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(38,54,76,.90), rgba(38,54,76,.93)), url('../img/workshop.webp') center/cover; }
 .hampers h2{ max-width:20ch; }
-.hampers .head-main > p{ font-size:1.125rem; }
+.hampers .head-main > p{ font-size:1rem; }
 .hampers .btn-row{ margin-top:2rem; }
 
 /* ---------- closing statement ---------- */
@@ -421,7 +421,7 @@ a.add{ text-decoration:none; display:inline-block; }
 /* ---------- inner pages (Meet Us, Support an Artisan) ---------- */
 .page-top{ color:var(--charcoal); padding-block:clamp(3rem, 7vw, 5.5rem); }
 .page-top h1{ color:var(--charcoal); max-width:18ch; }
-.page-top .lede{ margin-top:1.4rem; font-size:1.1875rem; max-width:40rem; color:#4a443d; }
+.page-top .lede{ margin-top:1.4rem; font-size:1.0625rem; max-width:40rem; color:#4a443d; }
 
 .trio{ display:grid; gap:3rem 2.2rem; }
 .trio figure{ margin:0; }
@@ -434,7 +434,7 @@ a.add{ text-decoration:none; display:inline-block; }
 @media (min-width:800px){ .trio{ grid-template-columns:repeat(3,1fr); } }
 
 .mission{ display:grid; gap:2.5rem 4rem; }
-.mission p{ font-size:1.125rem; max-width:var(--measure); }
+.mission p{ font-size:1rem; max-width:var(--measure); }
 .facts{ list-style:none; margin:0; padding:0; display:grid; gap:1.2rem; align-content:start; }
 .facts li{ border-top:1px solid var(--clay); padding-top:.8rem; }
 .facts b{ display:block; font-family:var(--display); font-weight:500; font-size:2.4rem; line-height:1; color:var(--sindoor); }
@@ -472,7 +472,7 @@ a.add{ text-decoration:none; display:inline-block; }
 .closing{ text-align:center; }
 .closing p{ font-family:var(--display); font-size:clamp(1.35rem, 2.6vw, 2rem); line-height:1.35; color:var(--charcoal); max-width:32ch; margin-inline:auto; text-wrap:balance; }
 .closing h2{ max-width:22ch; margin-inline:auto; }
-.closing .lede{ font-family:var(--text); font-size:1.0625rem; line-height:1.6; color:#4a443d; max-width:38rem; margin:1.2rem auto 2rem; }
+.closing .lede{ font-family:var(--text); font-size:.97rem; line-height:1.6; color:#4a443d; max-width:38rem; margin:1.2rem auto 2rem; }
 .closing .btn-row{ justify-content:center; }
 .disclaimer{ font-size:.9375rem; color:var(--walnut); max-width:50rem; margin:0 auto; padding:0 var(--gutter) 3rem; text-align:center; }
 

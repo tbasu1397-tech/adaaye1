@@ -34,7 +34,7 @@
 window.ADAAYE_CATEGORIES = [
   { id: 'table', name: 'Table & Kitchen', short: 'Table & Kitchen',
     blurb: 'Coasters, tea trays and earthen plates that turn every cup of tea into a small ritual.' },
-  { id: 'home',  name: 'Home Décor', short: 'Home Décor',
+  { id: 'home',  name: 'Home Decor', short: 'Home Decor',
     blurb: 'Keepsake boxes, lamps and desk pieces, painted to brighten an everyday corner.' },
   { id: 'wall',  name: 'Wall Art', short: 'Wall Art',
     blurb: 'Hand-painted canvases, fluid art and personalised wall hangings.' },
@@ -192,7 +192,7 @@ window.ADAAYE_PRODUCTS = [
   { no: 14, name: 'Earthen Planters', cat: 'home', style: 'Painted clay planters', status: 'soon' },
   { no: 15, name: 'Earthen Lunch Set', cat: 'table', style: 'For weddings and special occasions', status: 'soon' },
   { no: 17, name: 'Name Plate', cat: 'home', style: 'Personalised, for your door', status: 'soon' },
-  { no: 18, name: 'Wooden Kitchen Décor', cat: 'table', style: 'Painted wood for the kitchen', status: 'soon' },
+  { no: 18, name: 'Wooden Kitchen Decor', cat: 'table', style: 'Painted wood for the kitchen', status: 'soon' },
   { no: 19, name: 'Table Runner', cat: 'table', style: 'Single runner, painted by hand', status: 'soon' },
   { no: 20, name: 'Table Runner & Mats', cat: 'table', style: 'Runner with matching mats', status: 'soon' },
   { no: 21, name: 'Cloth Bangles', cat: 'wear', style: 'Fabric-wrapped, painted bangles', status: 'soon' }
