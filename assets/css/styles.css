@@ -579,3 +579,6 @@ a.add{ text-decoration:none; display:inline-block; }
 .arch::before{ content:""; position:absolute; inset:6px; border:1px solid rgba(164,49,42,.45); border-radius:50% 50% 4px 4px / 26% 26% 4px 4px; pointer-events:none; z-index:1; }
 .arch img{ display:block; width:100%; height:auto; aspect-ratio:893/1072; object-fit:cover; border-radius:50% 50% 2px 2px / 25% 25% 2px 2px; }
 @media (prefers-reduced-motion:reduce){ .arch{ animation:none; } }
+
+/* Journey: body text a touch softer */
+#journey .head p,#journey .timeline p{ opacity:.82; }
