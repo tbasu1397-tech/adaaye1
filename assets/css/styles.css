@@ -580,5 +580,5 @@ a.add{ text-decoration:none; display:inline-block; }
 .arch img{ display:block; width:100%; height:auto; aspect-ratio:893/1072; object-fit:cover; border-radius:50% 50% 2px 2px / 25% 25% 2px 2px; }
 @media (prefers-reduced-motion:reduce){ .arch{ animation:none; } }
 
-/* Journey: body text a touch softer */
-#journey .head p,#journey .timeline p{ opacity:.82; }
+/* Body text a touch softer, site-wide (headings, labels, buttons and errors stay full strength) */
+main p:not(.eyebrow):not(.form-error):not(.form-msg):not(.reveal-count):not(:has(.btn)){ opacity:.82; }
